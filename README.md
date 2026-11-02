@@ -4,7 +4,7 @@ API RESTful em **ASP.NET Core 8 (Controllers)** para gestão de **pacientes** e 
 organizada como **monolito modular** e persistindo **exclusivamente no MongoDB**.
 Projeto do CP6 de *Advanced Business Development with .NET* (FIAP).
 
-> 🎥 **Vídeo de demonstração:** [https://youtu.be/zkVCGf5fMqk](https://youtu.be/zkVCGf5fMqk)>
+> 🎥 **Vídeo de demonstração:** [https://youtu.be/zkVCGf5fMqk](https://youtu.be/zkVCGf5fMqk)
 >
 > | Integrante | RM |
 > |---|---|
