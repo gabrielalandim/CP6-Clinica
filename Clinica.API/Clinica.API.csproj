@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.31" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Clinica.SharedKernel\Clinica.SharedKernel.csproj" />
+    <ProjectReference Include="..\Clinica.Modules.Identity\Clinica.Modules.Identity.csproj" />
+    <ProjectReference Include="..\Clinica.Modules.Pacientes\Clinica.Modules.Pacientes.csproj" />
+    <ProjectReference Include="..\Clinica.Modules.Consultas\Clinica.Modules.Consultas.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,101 @@
+### CP6 - Clínica API — requisições para o vídeo (VS / VS Code REST Client / Rider)
+@host = http://localhost:5090
+
+### 1) Sem token → 401 (NAO_AUTENTICADO)
+GET {{host}}/api/pacientes
+
+### 2) Login como USER (copie o "jwt" da resposta para @tokenUser)
+POST {{host}}/api/auth
+Content-Type: application/json
+
+{ "email": "user@clinica.com", "senha": "User@123" }
+
+### 3) Login como ADMIN (copie o "jwt" da resposta para @tokenAdmin)
+POST {{host}}/api/auth
+Content-Type: application/json
+
+{ "email": "admin@clinica.com", "senha": "Admin@123" }
+
+@tokenUser = COLE_O_TOKEN_DO_USER
+@tokenAdmin = COLE_O_TOKEN_DO_ADMIN
+
+### 4) Login com senha errada → 401 (CREDENCIAIS_INVALIDAS)
+POST {{host}}/api/auth
+Content-Type: application/json
+
+{ "email": "user@clinica.com", "senha": "errada" }
+
+### 5) PageResult + HATEOAS
+GET {{host}}/api/pacientes?page=2&pageSize=5
+Authorization: Bearer {{tokenUser}}
+
+### 6) Filtro por nome
+GET {{host}}/api/pacientes?nome=ana
+Authorization: Bearer {{tokenUser}}
+
+### 7) Criar paciente → 201 (rode 2x para ver 409 PACIENTE_EMAIL_DUPLICADO)
+POST {{host}}/api/pacientes
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{ "nome": "Paciente Demo", "email": "demo@exemplo.com", "telefone": "(11) 99999-0000", "cidade": "São Paulo", "uf": "SP" }
+
+### 8) Validação de DTO → 400 (VALIDACAO com details)
+POST {{host}}/api/pacientes
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{ "nome": "", "email": "nao-e-email", "cidade": "", "uf": "S" }
+
+### 9) Id inválido → 400 (PACIENTE_ID_INVALIDO)
+GET {{host}}/api/pacientes/abc
+Authorization: Bearer {{tokenUser}}
+
+### 10) Id inexistente → 404 (PACIENTE_NAO_ENCONTRADO)
+GET {{host}}/api/pacientes/ffffffffffffffffffffffff
+Authorization: Bearer {{tokenUser}}
+
+@pacienteId = COLE_O_ID_DO_PACIENTE
+
+### 11) Agendar consulta → 201 (rode 2x para ver 409 HORARIO_INDISPONIVEL)
+POST {{host}}/api/consultas
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{ "pacienteId": "{{pacienteId}}", "dataHora": "2027-03-10T14:00:00", "especialidade": "Cardiologia", "valor": 350.00 }
+
+### 12) Data no passado → 400 (DATA_NO_PASSADO)
+POST {{host}}/api/consultas
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{ "pacienteId": "{{pacienteId}}", "dataHora": "2020-01-01T10:00:00", "especialidade": "Cardiologia", "valor": 350.00 }
+
+### 13) Consultas do paciente (link HATEOAS "consultas_do_paciente")
+GET {{host}}/api/consultas?pacienteId={{pacienteId}}&page=1&pageSize=10
+Authorization: Bearer {{tokenUser}}
+
+### 14) DELETE como USER → 403 (ACESSO_NEGADO)
+DELETE {{host}}/api/pacientes/{{pacienteId}}
+Authorization: Bearer {{tokenUser}}
+
+### 15) DELETE como ADMIN com consulta agendada → 409 (PACIENTE_COM_CONSULTAS_AGENDADAS)
+DELETE {{host}}/api/pacientes/{{pacienteId}}
+Authorization: Bearer {{tokenAdmin}}
+
+@consultaId = COLE_O_ID_DA_CONSULTA
+
+### 16) Cancelar consulta → 200 (rode 2x para ver 409 CONSULTA_JA_CANCELADA)
+DELETE {{host}}/api/consultas/{{consultaId}}
+Authorization: Bearer {{tokenUser}}
+
+### 17) Agora o ADMIN consegue excluir → 204
+DELETE {{host}}/api/pacientes/{{pacienteId}}
+Authorization: Bearer {{tokenAdmin}}
+
+### 18) Listar usuários (somente admin)
+GET {{host}}/api/user?page=1&pageSize=10
+Authorization: Bearer {{tokenAdmin}}
+
+### 19) Health check (ping no MongoDB)
+GET {{host}}/health
