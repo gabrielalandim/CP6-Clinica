@@ -5,7 +5,6 @@ organizada como **monolito modular** e persistindo **exclusivamente no MongoDB**
 Projeto do CP6 de *Advanced Business Development with .NET* (FIAP).
 
 > 🎥 **Vídeo de demonstração:** [https://youtu.be/zkVCGf5fMqk](https://youtu.be/zkVCGf5fMqk)>
-> 👥 **Grupo ClyvoPredict · Turma 2TDSPX**
 >
 > | Integrante | RM |
 > |---|---|
